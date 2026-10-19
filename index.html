@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 
@@ -16,16 +15,16 @@
 
     <style>
         :root {
-            --primary-color: #fda40c;
-            --primary-dark: #e08a00;
+            --primary-color: #fd0c246f;
+            --primary-dark: #e00000c7;
             --primary-light: #fef3c7;
             --accent-color: #8c6954;
-            --accent-dark: #5c4033;
+            --accent-dark: #52372a;
             --bg-color: #fbf8f5;
             --card-bg: #ffffff;
             --text-main: #1e293b;
             --text-muted: #64748b;
-            --wa-green: #25d366;
+            --wa-green: #13910d;
             --wa-green-hover: #20ba59;
             --danger-color: #ef4444;
             --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -111,7 +110,7 @@
             font-family: 'Outfit', sans-serif;
             font-size: 1.35rem;
             font-weight: 800;
-            background: linear-gradient(135deg, #fda40c, #f59e0b);
+            background: linear-gradient(135deg, #1d226c, #0b22f5);
             color: #ffffff;
             border-radius: var(--radius-md);
             margin: 14px auto 12px auto;
@@ -174,9 +173,9 @@
         }
 
         .btn-sucursal.active {
-            background: linear-gradient(135deg, #fda40c, #e08a00);
+            background: linear-gradient(135deg, #c9953c, #cab086);
             color: #ffffff;
-            border-color: #fda40c;
+            border-color: #fccf80;
             box-shadow: 0 4px 12px rgba(253, 164, 12, 0.35);
             transform: scale(1.02);
         }
@@ -184,7 +183,7 @@
         .sucursal-info-badge {
             margin-top: 10px;
             font-size: 0.82rem;
-            color: #166534;
+            color: #055a26;
             background: #dcfce7;
             display: inline-flex;
             align-items: center;
@@ -299,7 +298,7 @@
         }
 
         .categories button.active-cat {
-            background: linear-gradient(135deg, #fda40c, #e08a00);
+            background: linear-gradient(135deg, #98103089, #e00095);
             color: #ffffff;
             border-color: transparent;
             box-shadow: 0 3px 10px rgba(253, 164, 12, 0.35);
@@ -470,7 +469,7 @@
 
         /* Botones de acción */
         .btn-add-cart {
-            background: linear-gradient(135deg, #fda40c, #e08a00);
+            background: linear-gradient(135deg, #fab743, #f1a832);
             color: #ffffff;
             border: none;
             border-radius: var(--radius-md);
@@ -488,7 +487,7 @@
         }
 
         .btn-add-cart:hover {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
+            background: linear-gradient(135deg, #f59e0b, #faa03a);
             transform: translateY(-1px);
         }
 
@@ -698,7 +697,7 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
-            background: linear-gradient(135deg, #25d366, #16a34a);
+            background: linear-gradient(135deg, #085f28, #075c26);
             color: #ffffff;
             border: none;
             border-radius: 999px;
@@ -717,7 +716,7 @@
 
         .floating-cart-btn:hover {
             transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 10px 24px rgba(37, 211, 102, 0.6);
+            box-shadow: 0 10px 24px rgba(7, 96, 39, 0.6);
         }
 
         .cart-badge {
@@ -1071,15 +1070,38 @@
             animation: bounce-wave 1.2s infinite ease-in-out;
         }
 
-        .sound-wave span:nth-child(1) { animation-delay: 0.1s; }
-        .sound-wave span:nth-child(2) { animation-delay: 0.3s; }
-        .sound-wave span:nth-child(3) { animation-delay: 0.6s; }
-        .sound-wave span:nth-child(4) { animation-delay: 0.2s; }
-        .sound-wave span:nth-child(5) { animation-delay: 0.4s; }
+        .sound-wave span:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .sound-wave span:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+
+        .sound-wave span:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        .sound-wave span:nth-child(4) {
+            animation-delay: 0.2s;
+        }
+
+        .sound-wave span:nth-child(5) {
+            animation-delay: 0.4s;
+        }
 
         @keyframes bounce-wave {
-            0%, 100% { height: 8px; background: var(--primary-color); }
-            50% { height: 32px; background: var(--accent-dark); }
+
+            0%,
+            100% {
+                height: 8px;
+                background: var(--primary-color);
+            }
+
+            50% {
+                height: 32px;
+                background: var(--accent-dark);
+            }
         }
 
         .voice-close-btn {
@@ -1241,7 +1263,8 @@
         <div class="voice-card">
             <div style="font-size: 2.2rem; margin-bottom: 8px;">🎤</div>
             <h3 style="margin: 0 0 4px 0; font-family: 'Outfit', sans-serif; font-size: 1.25rem;">Escuchando...</h3>
-            <p style="margin: 0; color: var(--text-muted); font-size: 0.85rem;">Hablá para buscar en la carta de Don Pilo</p>
+            <p style="margin: 0; color: var(--text-muted); font-size: 0.85rem;">Hablá para buscar en la carta de Don
+                Pilo</p>
             <div class="sound-wave">
                 <span></span>
                 <span></span>
@@ -1295,7 +1318,8 @@
                     <!-- Filas del carrito dinámicas -->
                 </div>
 
-                <div id="cartEmptyMsg" style="text-align: center; color: var(--text-muted); padding: 30px 10px; display: none;">
+                <div id="cartEmptyMsg"
+                    style="text-align: center; color: var(--text-muted); padding: 30px 10px; display: none;">
                     <div style="font-size: 2.8rem; margin-bottom: 8px;">🍽️</div>
                     <p style="font-weight: 600; margin: 0 0 4px 0;">Tu carrito está vacío</p>
                     <small>¡Elegí tus platos favoritos de la carta para hacer tu pedido!</small>
@@ -1304,13 +1328,18 @@
                 <div id="cartForm" class="cart-form">
                     <h3>📋 Datos de entrega</h3>
                     <div class="delivery-toggle">
-                        <button type="button" class="delivery-btn active" id="btnTipoDelivery" onclick="setTipoEntrega('delivery')">🛵 Delivery</button>
-                        <button type="button" class="delivery-btn" id="btnTipoRetiro" onclick="setTipoEntrega('retiro')">🏪 Retiro en local</button>
+                        <button type="button" class="delivery-btn active" id="btnTipoDelivery"
+                            onclick="setTipoEntrega('delivery')">🛵 Delivery</button>
+                        <button type="button" class="delivery-btn" id="btnTipoRetiro"
+                            onclick="setTipoEntrega('retiro')">🏪 Retiro en local</button>
                     </div>
 
-                    <input type="text" id="orderNombre" class="cart-input" placeholder="Tu Nombre y Apellido (ej: Juan Pérez)">
-                    <input type="text" id="orderDireccion" class="cart-input" placeholder="Dirección de entrega (ej: Av. Santa Fe 1234, 4° B)">
-                    <textarea id="orderNotas" class="cart-input" rows="2" placeholder="Aclaraciones (ej: sin sal, salsa aparte, cambio de $20.000)"></textarea>
+                    <input type="text" id="orderNombre" class="cart-input"
+                        placeholder="Tu Nombre y Apellido (ej: Juan Pérez)">
+                    <input type="text" id="orderDireccion" class="cart-input"
+                        placeholder="Dirección de entrega (ej: Av. Santa Fe 1234, 4° B)">
+                    <textarea id="orderNotas" class="cart-input" rows="2"
+                        placeholder="Aclaraciones (ej: sin sal, salsa aparte, cambio de $20.000)"></textarea>
                 </div>
             </div>
 
@@ -1388,9 +1417,9 @@
          * CONFIGURACIÓN DE SUCURSALES DON PILO
          **********************************************************/
         const SUCURSALES = [
-            { nombre: "Agüero 2274", telefono: "5491164298194", formato: "+54 9 11 6429-8194" },
-            { nombre: "Arenales 2739", telefono: "5491159051452", formato: "+54 9 11 5905-1452" },
-            { nombre: "Báez 555", telefono: "5491136729307", formato: "+54 9 11 3672-9307" }
+            { nombre: "Agüero 2274", telefono: "5491164298194", formato: "+54 9 11 23140119 " },
+            { nombre: "Arenales 2739", telefono: "5491159051452", formato: "+54 9 11 23140119 " },
+            { nombre: "Báez 555", telefono: "5491136729307", formato: "+54 9 11 23140119 " }
         ];
 
         let sucursalActivaIndex = 0;
@@ -1406,7 +1435,7 @@
         function cambiarSucursal(index) {
             sucursalActivaIndex = index;
             localStorage.setItem('donpilo_sucursal_idx', index);
-            
+
             document.querySelectorAll('.btn-sucursal').forEach((btn, i) => {
                 btn.classList.toggle('active', i === index);
             });
@@ -1762,10 +1791,10 @@
             const modalBtnAdd = document.getElementById('modalBtnAdd');
 
             modalImg.src = getImgUrl(p.imagen);
-            modalImg.onerror = function() { this.src = PLACEHOLDER_SVG; };
+            modalImg.onerror = function () { this.src = PLACEHOLDER_SVG; };
             modalTitle.innerText = p.nombre;
             modalDesc.innerText = p.descripcion || 'Rico, casero y listo para disfrutar.';
-            
+
             const precioFormatted = formatMoney(p.precio);
             modalPrice.innerText = precioFormatted;
 

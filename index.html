@@ -42,7 +42,7 @@
 
         html, body {
             max-width: 100%;
-            overflow-x: hidden;
+            overflow-x: clip;
         }
 
         body {
@@ -287,40 +287,53 @@
 
         /* ================= CATEGORÍAS (FIJAS ARRIBA AL HACER SCROLL) ================= */
         .categories-wrapper {
-            max-width: 100%;
-            width: 100%;
-            margin: 0 0 18px 0;
             position: -webkit-sticky;
             position: sticky;
             top: 0;
             z-index: 1000;
-            background: rgba(251, 248, 245, 0.98);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            padding: 8px 10px;
-            border-bottom: 2px solid rgba(253, 164, 12, 0.3);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            margin: 0 0 16px 0;
+            background: #ffffff;
+            border-bottom: 2px solid #fda40c;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+            padding: 10px 8px;
             box-sizing: border-box;
+            will-change: transform;
         }
 
         .categories {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scroll-snap-type: x mandatory;
+            justify-content: flex-start;
             gap: 8px;
-            padding: 4px 2px;
+            padding: 4px 4px 6px 4px;
+            scrollbar-width: thin;
+        }
+
+        .categories::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .categories::-webkit-scrollbar-thumb {
+            background: rgba(253, 164, 12, 0.5);
+            border-radius: 4px;
         }
 
         .categories button {
-            padding: 7px 16px;
-            background: #ffffff;
-            color: var(--text-muted);
+            flex-shrink: 0;
+            scroll-snap-align: start;
+            padding: 8px 18px;
+            background: #f8fafc;
+            color: var(--text-main);
             border: 1.5px solid #e2e8f0;
             border-radius: 999px;
             cursor: pointer;
-            font-family: inherit;
-            font-size: 0.86rem;
+            font-size: 0.9rem;
             font-weight: 600;
+            font-family: inherit;
             transition: all 0.2s ease;
             box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
             white-space: nowrap;
@@ -1230,8 +1243,10 @@
                 margin: 0 -10px 14px -10px;
                 width: calc(100% + 20px);
                 padding: 8px 10px;
-                background: #fbf8f5;
-                box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+                background: #ffffff;
+                border-bottom: 2px solid #fda40c;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+                will-change: transform;
             }
 
             /* Scroll horizontal táctil de categorías en móviles */
@@ -1474,9 +1489,9 @@
          * CONFIGURACIÓN DE SUCURSALES DON PILO
          **********************************************************/
         const SUCURSALES = [
-            { nombre: "Agüero 2274", telefono: "5491164298194", formato: "+54 9 11 23140119 " },
-            { nombre: "Arenales 2739", telefono: "5491159051452", formato: "+54 9 11 23140119 " },
-            { nombre: "Báez 555", telefono: "5491136729307", formato: "+54 9 11 23140119 " }
+            { nombre: "Agüero 2274", telefono: "5491164298194", formato: "+54 9 11 6429-8194" },
+            { nombre: "Arenales 2739", telefono: "5491159051452", formato: "+54 9 11 5905-1452" },
+            { nombre: "Báez 555", telefono: "5491136729307", formato: "+54 9 11 3672-9307" }
         ];
 
         let sucursalActivaIndex = 0;
@@ -1637,11 +1652,19 @@
 
         window.filtrarCat = function (cat, btn) {
             document.querySelectorAll("#category-buttons button").forEach(b => b.classList.remove("active-cat"));
-            if (btn) btn.classList.add("active-cat");
+            if (btn) {
+                btn.classList.add("active-cat");
+                btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
             const filtrados = cat === "Todos" ? productos : productos.filter(p => p.categoria === cat);
             render(filtrados);
-            const pl = document.getElementById('product-list');
-            if (pl) window.scrollTo({ top: pl.offsetTop - 80, behavior: "smooth" });
+            const wrapper = document.querySelector('.categories-wrapper');
+            if (wrapper) {
+                const wrapperTop = wrapper.getBoundingClientRect().top + window.scrollY;
+                if (window.scrollY > wrapperTop) {
+                    window.scrollTo({ top: wrapperTop, behavior: "smooth" });
+                }
+            }
         };
 
         /**********************************************************

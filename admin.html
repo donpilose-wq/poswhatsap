@@ -115,7 +115,45 @@
         .previewImg {
             max-width: 120px;
             margin-top: 8px;
-            border-radius: 6px
+            border-radius: 6px;
+            display: block;
+        }
+
+        .upload-container {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 4px;
+        }
+
+        .upload-btn-label {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            background: #2d87d6;
+            color: white;
+            padding: 7px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            width: fit-content;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .upload-btn-label:hover {
+            background: #236bb0;
+        }
+
+        .upload-status {
+            font-size: 12px;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        .file-input-hidden {
+            display: none;
         }
 
         textarea#multiInput {
@@ -173,10 +211,10 @@
 </head>
 
 <body>
-    <h1>Admin Carta — Tilo Café Aguero</h1>
+    <h1>Admin Carta — Don Pilo</h1>
     <div class="topRow">
         <div style="flex:1">
-            <div style="margin-bottom:6px"><span class="small">Repositorio:</span> <b> tilo-restocafe / cartaaguero</b>
+            <div style="margin-bottom:6px"><span class="small">Repositorio:</span> <b> donpilose-wq / menuclick</b>
             </div>
             <div style="display:flex;gap:8px;align-items:center">
                 <label style="min-width:40px">Token:</label>
@@ -219,9 +257,18 @@
             </div>
 
             <div>
-                <label>Imagen (ruta o URL)</label>
-                <input id="imagen" type="text" oninput="previewImage()">
-                <img id="preview" class="previewImg" style="display:none">
+                <label>Imagen del Producto</label>
+                <div class="upload-container">
+                    <input id="imagen" type="text" placeholder="img/foto.jpg o URL" oninput="previewImage()">
+                    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+                        <label class="upload-btn-label" for="fotoInput">
+                            📷 Subir foto a GitHub (img/)
+                        </label>
+                        <input type="file" id="fotoInput" class="file-input-hidden" accept="image/*" onchange="subirFotoGitHub(this)">
+                        <span id="uploadStatus" class="upload-status"></span>
+                    </div>
+                    <img id="preview" class="previewImg" style="display:none">
+                </div>
             </div>
 
             <div>
@@ -353,11 +400,27 @@
 
                 // imagen
                 const tdImg = document.createElement('td');
+                tdImg.style.textAlign = 'center';
                 const img = document.createElement('img');
                 img.className = 'mini';
                 img.src = p.imagen || '';
+                img.title = p.imagen || 'Sin imagen';
                 img.onerror = () => { img.style.display = 'none'; };
                 tdImg.appendChild(img);
+
+                const fileBtn = document.createElement('label');
+                fileBtn.innerHTML = '📷';
+                fileBtn.title = 'Cambiar foto en GitHub (img/)';
+                fileBtn.style.cssText = 'display:inline-block;cursor:pointer;font-size:14px;margin-top:4px;padding:2px 6px;background:#e2d9d2;border-radius:4px;';
+                
+                const fileInp = document.createElement('input');
+                fileInp.type = 'file';
+                fileInp.accept = 'image/*';
+                fileInp.style.display = 'none';
+                fileInp.onchange = (e) => subirFotoFila(e.target, p.id);
+                fileBtn.appendChild(fileInp);
+                tdImg.appendChild(fileBtn);
+
                 tr.appendChild(tdImg);
 
                 // nombre
@@ -432,9 +495,40 @@
          * Form helpers (ahora cargan por ID y scrollean al form)
          **********************************************************/
         function toggleForm() { const f = document.getElementById('form'); f.style.display = f.style.display === 'none' || f.style.display === '' ? 'block' : 'none'; if (f.style.display === 'block') f.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
-        function cancelForm() { document.getElementById('editId').value = ''; document.getElementById('nombre').value = ''; document.getElementById('descripcion').value = ''; document.getElementById('precio').value = ''; document.getElementById('imagen').value = ''; document.getElementById('categoria').value = ''; document.getElementById('preview').style.display = 'none'; document.getElementById('form').style.display = 'none'; }
+        function cancelForm() {
+            document.getElementById('editId').value = '';
+            document.getElementById('nombre').value = '';
+            document.getElementById('descripcion').value = '';
+            document.getElementById('precio').value = '';
+            document.getElementById('imagen').value = '';
+            document.getElementById('categoria').value = '';
+            document.getElementById('preview').style.display = 'none';
+            const stat = document.getElementById('uploadStatus');
+            if (stat) stat.innerText = '';
+            const fInp = document.getElementById('fotoInput');
+            if (fInp) fInp.value = '';
+            document.getElementById('form').style.display = 'none';
+        }
         function previewImage() { const v = document.getElementById('imagen').value.trim(); const img = document.getElementById('preview'); if (!v) { img.style.display = 'none'; img.src = ''; return; } img.src = v; img.style.display = 'block'; img.onerror = () => { img.style.display = 'none'; }; }
-        function loadIntoFormById(id) { const idx = findIndexById(id); if (idx === -1) { showToast('Producto no encontrado para editar', 'err'); return; } const p = productos[idx]; document.getElementById('editId').value = p.id; document.getElementById('nombre').value = p.nombre || ''; document.getElementById('descripcion').value = p.descripcion || ''; document.getElementById('precio').value = p.precio || ''; document.getElementById('imagen').value = p.imagen || ''; document.getElementById('categoria').value = p.categoria || ''; previewImage(); const f = document.getElementById('form'); f.style.display = 'block'; f.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+        function loadIntoFormById(id) {
+            const idx = findIndexById(id);
+            if (idx === -1) { showToast('Producto no encontrado para editar', 'err'); return; }
+            const p = productos[idx];
+            document.getElementById('editId').value = p.id;
+            document.getElementById('nombre').value = p.nombre || '';
+            document.getElementById('descripcion').value = p.descripcion || '';
+            document.getElementById('precio').value = p.precio || '';
+            document.getElementById('imagen').value = p.imagen || '';
+            document.getElementById('categoria').value = p.categoria || '';
+            const stat = document.getElementById('uploadStatus');
+            if (stat) stat.innerText = '';
+            const fInp = document.getElementById('fotoInput');
+            if (fInp) fInp.value = '';
+            previewImage();
+            const f = document.getElementById('form');
+            f.style.display = 'block';
+            f.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
         function validarProductoObj(obj) { if (!obj.nombre) return "Falta nombre"; if (!obj.precio) return "Falta precio"; return null; }
         function guardarFormulario() {
             const nombre = document.getElementById('nombre').value.trim(); const descripcion = document.getElementById('descripcion').value.trim(); const precio = sanitizePrice(document.getElementById('precio').value.trim()); const imagen = document.getElementById('imagen').value.trim(); const categoria = document.getElementById('categoria').value.trim(); const editId = document.getElementById('editId').value; const obj = { nombre, descripcion, precio, imagen, categoria }; const err = validarProductoObj(obj); if (err) { showToast(err, 'err'); return; } if (editId) {
@@ -447,6 +541,105 @@
         function procesarMulti() { const raw = document.getElementById('multiInput').value.trim(); if (!raw) { showToast('Nada para procesar', 'err'); return; } const lines = raw.split('\n').map(l => l.trim()).filter(Boolean); for (const ln of lines) { const parts = ln.split('|').map(p => p.trim()); const nombre = parts[0] || 'Sin nombre'; const descripcion = parts[1] || ''; const precio = sanitizePrice(parts[2] || ''); const imagen = parts[3] || ''; const categoria = parts[4] || ''; const id = generateNextProdId(); productos.push({ id, nombre, descripcion, precio, imagen, categoria }); } document.getElementById('multiInput').value = ''; render(productos); showToast('Productos agregados localmente. Presioná "Guardar TODOS los cambios".', 'info', 3500); }
 
         function eliminarProductoPorId(id) { if (!confirm('Eliminar producto?')) return; const idx = findIndexById(id); if (idx !== -1) { productos.splice(idx, 1); render(productos); showToast('Producto eliminado localmente', 'info', 1600); } else { showToast('Producto no encontrado', 'err'); } }
+
+        /**********************************************************
+         * Subir imagen a GitHub (carpeta img/)
+         **********************************************************/
+        function normalizarNombreArchivo(str) {
+            return str.toLowerCase()
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                .replace(/[^a-z0-9._-]/g, '_')
+                .replace(/_+/g, '_');
+        }
+
+        async function subirArchivoGitHub(file, customNamePrefix = '') {
+            const token = getToken();
+            if (!token) throw new Error('Pegá y guardá tu token de GitHub arriba para poder subir imágenes');
+
+            let cleanName = normalizarNombreArchivo(file.name);
+            if (customNamePrefix) {
+                const ext = cleanName.includes('.') ? cleanName.substring(cleanName.lastIndexOf('.')) : '.jpg';
+                cleanName = normalizarNombreArchivo(customNamePrefix) + ext;
+            }
+
+            const path = `img/${cleanName}`;
+
+            // Convertir a base64
+            const base64Content = await new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const result = reader.result;
+                    const base64 = result.substring(result.indexOf(',') + 1);
+                    resolve(base64);
+                };
+                reader.onerror = err => reject(err);
+                reader.readAsDataURL(file);
+            });
+
+            // Verificar si el archivo ya existe para obtener sha
+            let sha = undefined;
+            try {
+                const info = await githubGetFileInfo(path);
+                if (info && info.sha) sha = info.sha;
+            } catch (e) { }
+
+            // Subir a GitHub
+            await githubPutBinaryFile(path, base64Content, `Subir imagen ${cleanName} a img/`, sha);
+            return path;
+        }
+
+        async function subirFotoGitHub(fileInput) {
+            const file = fileInput.files && fileInput.files[0];
+            if (!file) return;
+
+            const statusEl = document.getElementById('uploadStatus');
+            const prodName = document.getElementById('nombre').value.trim();
+            const prefix = prodName ? prodName.replace(/\s+/g, '_') : '';
+
+            try {
+                if (statusEl) statusEl.innerText = 'Subiendo imagen a GitHub... ⏳';
+                showToast('Subiendo foto a GitHub...', 'info', 2500);
+
+                const imgPath = await subirArchivoGitHub(file, prefix);
+
+                document.getElementById('imagen').value = imgPath;
+                previewImage();
+
+                if (statusEl) statusEl.innerText = `✔ Subida con éxito: ${imgPath}`;
+                showToast(`Foto guardada en GitHub: ${imgPath}`, 'ok', 3000);
+            } catch (err) {
+                console.error(err);
+                if (statusEl) statusEl.innerText = '✖ Error al subir';
+                showToast('Error al subir imagen: ' + (err.message || err), 'err', 5000);
+            } finally {
+                fileInput.value = '';
+            }
+        }
+
+        async function subirFotoFila(fileInput, prodId) {
+            const file = fileInput.files && fileInput.files[0];
+            if (!file) return;
+
+            const idx = findIndexById(prodId);
+            if (idx === -1) { showToast('Producto no encontrado', 'err'); return; }
+            const prod = productos[idx];
+
+            try {
+                showToast(`Subiendo foto para ${prod.nombre || prodId}... ⏳`, 'info', 3000);
+                const prefix = prod.nombre ? prod.nombre.replace(/\s+/g, '_') : prodId;
+                const imgPath = await subirArchivoGitHub(file, prefix);
+
+                prod.imagen = imgPath;
+                render(productos);
+
+                showToast(`Foto actualizada a ${imgPath}. Recordá guardar los cambios.`, 'ok', 3500);
+            } catch (err) {
+                console.error(err);
+                showToast('Error al subir imagen: ' + (err.message || err), 'err', 5000);
+            } finally {
+                fileInput.value = '';
+            }
+        }
 
         /**********************************************************
          * Refrescar array desde la tabla (importante antes de "Guardar TODOS")
@@ -482,6 +675,27 @@
                 throw new Error(`GitHub get ${path} -> ${res.status} ${txt}`);
             }
             return await res.json();
+        }
+
+        async function githubPutBinaryFile(path, base64Content, message, sha) {
+            const token = getToken();
+            if (!token) throw new Error('Token requerido para subir cambios a GitHub');
+
+            const url = `https://api.github.com/repos/${USERNAME}/${REPO}/contents/${path}`;
+            const body = { message, content: base64Content, branch: BRANCH };
+            if (sha) body.sha = sha;
+
+            const res = await fetch(url, {
+                method: 'PUT',
+                headers: { Authorization: 'token ' + token, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' },
+                body: JSON.stringify(body)
+            });
+
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) {
+                throw new Error(`GitHub PUT ${path} -> ${res.status}: ${data.message || JSON.stringify(data)}`);
+            }
+            return data;
         }
 
         async function githubPutFile(path, contentString, message, sha) {
@@ -648,9 +862,6 @@
         document.addEventListener('DOMContentLoaded', () => { loadProducts(); });
     </script>
 
-</body>
-
-</html>
 </body>
 
 </html>

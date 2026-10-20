@@ -658,8 +658,16 @@
                 document.getElementById('imagen').value = imgPath;
                 previewImage();
 
-                if (statusEl) statusEl.innerText = `✔ Subida con éxito: ${imgPath}`;
-                showToast(`Foto guardada en GitHub: ${imgPath}`, 'ok', 3000);
+                // Si estamos editando o creando un producto con nombre y precio, guardamos el formulario automáticamente
+                const nombre = document.getElementById('nombre').value.trim();
+                const precio = sanitizePrice(document.getElementById('precio').value.trim());
+                if (nombre && precio) {
+                    guardarFormulario();
+                    showToast(`Foto ${imgPath} asignada y producto guardado`, 'ok', 3500);
+                } else {
+                    if (statusEl) statusEl.innerText = `✔ Subida con éxito: ${imgPath}`;
+                    showToast(`Foto guardada en GitHub: ${imgPath}`, 'ok', 3000);
+                }
             } catch (err) {
                 console.error(err);
                 if (statusEl) statusEl.innerText = '✖ Error al subir';
@@ -685,7 +693,7 @@
                 prod.imagen = imgPath;
                 render(productos);
 
-                showToast(`Foto actualizada a ${imgPath}. Recordá guardar los cambios.`, 'ok', 3500);
+                showToast(`Foto guardada en ${imgPath}. Presioná 'Guardar TODOS los cambios' para publicar.`, 'ok', 3500);
             } catch (err) {
                 console.error(err);
                 showToast('Error al subir imagen: ' + (err.message || err), 'err', 5000);

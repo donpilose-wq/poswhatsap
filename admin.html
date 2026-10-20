@@ -96,10 +96,27 @@
             top: 18px;
             right: 18px;
             z-index: 1200;
-            padding: 10px 14px;
-            background: #a07b68;
+            padding: 11px 18px;
+            background: #27ae60;
             color: #fff;
-            border-radius: 8px
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+            border: 2px solid #fff;
+            cursor: pointer;
+            transition: transform 0.15s ease, background 0.2s ease;
+        }
+
+        #guardarTodos:hover {
+            background: #219150;
+            transform: scale(1.03);
+        }
+
+        .precio-input:focus {
+            outline: 2px solid #27ae60;
+            border-color: #27ae60;
+            background: #f0fff4;
         }
 
         .small {
@@ -290,8 +307,8 @@
                 <th>Nombre</th>
                 <th>Descripción</th>
                 <th>Categoría</th>
-                <th style="width:100px">Precio (ES)</th>
-                <th style="width:180px">Acciones</th>
+                <th style="width:110px">Precio (ES)</th>
+                <th style="width:140px">Acciones</th>
             </tr>
         </thead>
         <tbody id="tbody"></tbody>
@@ -457,18 +474,55 @@
                 const tdPrecio = document.createElement('td');
                 const precio = document.createElement('input');
                 precio.type = 'text';
+                precio.className = 'precio-input';
                 precio.value = p.precio || '';
+                precio.placeholder = '0';
                 precio.oninput = e => { const idx = findIndexById(p.id); if (idx !== -1) productos[idx].precio = e.target.value; };
+                
+                // Navegación con tecla Tab y Flechas arriba / abajo solo entre casilleros de precio
+                precio.addEventListener('keydown', e => {
+                    if (e.key === 'Tab' || e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                        const inputs = Array.from(document.querySelectorAll('.precio-input'));
+                        const curIdx = inputs.indexOf(precio);
+                        if (curIdx === -1) return;
+
+                        if (e.key === 'Tab') {
+                            e.preventDefault();
+                            if (e.shiftKey) {
+                                // Shift + Tab: subir al precio anterior
+                                if (curIdx > 0) {
+                                    inputs[curIdx - 1].focus();
+                                    inputs[curIdx - 1].select();
+                                }
+                            } else {
+                                // Tab: bajar al siguiente precio
+                                if (curIdx < inputs.length - 1) {
+                                    inputs[curIdx + 1].focus();
+                                    inputs[curIdx + 1].select();
+                                }
+                            }
+                        } else if (e.key === 'ArrowDown') {
+                            e.preventDefault();
+                            if (curIdx < inputs.length - 1) {
+                                inputs[curIdx + 1].focus();
+                                inputs[curIdx + 1].select();
+                            }
+                        } else if (e.key === 'ArrowUp') {
+                            e.preventDefault();
+                            if (curIdx > 0) {
+                                inputs[curIdx - 1].focus();
+                                inputs[curIdx - 1].select();
+                            }
+                        }
+                    }
+                });
+
                 tdPrecio.appendChild(precio);
                 tr.appendChild(tdPrecio);
 
-                // acciones
+                // acciones (solo Editar y Eliminar; se guarda todo con 'Guardar TODOS los cambios')
                 const tdAcc = document.createElement('td');
                 tdAcc.className = 'rowActions';
-
-                const b1 = document.createElement('button');
-                b1.textContent = "Guardar";
-                b1.onclick = () => guardarFilaPorId(p.id);
 
                 const b2 = document.createElement('button');
                 b2.textContent = "Editar";
@@ -480,7 +534,6 @@
                 b3.className = "danger";
                 b3.onclick = () => eliminarProductoPorId(p.id);
 
-                tdAcc.appendChild(b1);
                 tdAcc.appendChild(b2);
                 tdAcc.appendChild(b3);
 

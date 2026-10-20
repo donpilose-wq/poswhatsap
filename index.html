@@ -70,11 +70,11 @@
         /* ================= HEADER & LOGO ================= */
         header {
             width: 100%;
-            background: linear-gradient(160deg, #2c1a0e 0%, #5a2d0c 40%, #3d1f08 100%);
-            border-bottom: 3px solid rgba(253, 164, 12, 0.5);
-            padding: 18px 12px;
+            background: radial-gradient(circle at center, #3d1b09 0%, #200e05 65%, #140702 100%);
+            border-bottom: 3px solid rgba(253, 164, 12, 0.55);
+            padding: 16px 12px;
             text-align: center;
-            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
             position: relative;
             display: flex;
             flex-direction: column;
@@ -89,21 +89,21 @@
             align-items: center;
             justify-content: center;
             width: 100%;
-            max-width: 900px;
-            padding: 4px 10px;
+            max-width: 680px;
+            padding: 4px 8px;
             margin: 0 auto;
             box-sizing: border-box;
         }
 
         .banner-img {
-            width: 100%;
-            max-width: 760px;
+            width: auto;
+            max-width: 90%;
             height: auto;
-            max-height: 280px;
+            max-height: 240px;
             object-fit: contain;
             display: block;
             margin: 0 auto;
-            filter: drop-shadow(0 6px 20px rgba(0, 0, 0, 0.55));
+            filter: drop-shadow(0 6px 24px rgba(253, 164, 12, 0.25)) drop-shadow(0 4px 14px rgba(0, 0, 0, 0.8));
             transition: transform 0.3s ease;
         }
 
@@ -211,15 +211,20 @@
         /* ================= BUSCADOR ================= */
         .search-container {
             display: flex;
+            align-items: center;
             justify-content: center;
             gap: 6px;
             margin: 12px auto 16px auto;
             max-width: 600px;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 0 2px;
         }
 
         #search {
             flex: 1;
-            padding: 10px 16px;
+            min-width: 0;
+            padding: 10px 14px;
             border-radius: var(--radius-md);
             border: 2px solid #e2e8f0;
             background: #ffffff;
@@ -228,6 +233,7 @@
             font-size: 0.92rem;
             transition: all 0.25s ease;
             box-shadow: var(--shadow-sm);
+            box-sizing: border-box;
         }
 
         #search:focus {
@@ -241,16 +247,20 @@
             color: white;
             border: none;
             border-radius: var(--radius-md);
-            padding: 0 18px;
+            padding: 0 16px;
+            height: 42px;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             cursor: pointer;
             transition: all 0.2s ease;
             box-shadow: var(--shadow-sm);
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             font-family: inherit;
+            flex-shrink: 0;
+            white-space: nowrap;
+            box-sizing: border-box;
         }
 
         #btnBuscar:hover {
@@ -262,14 +272,18 @@
             background: #ffffff;
             color: var(--accent-dark);
             border: 2px solid #e2e8f0;
-            padding: 0 12px;
+            padding: 0;
+            width: 42px;
+            height: 42px;
             font-size: 1.1rem;
             border-radius: var(--radius-md);
             cursor: pointer;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             transition: all 0.2s ease;
+            flex-shrink: 0;
+            box-sizing: border-box;
         }
 
         #btnVoice:hover {
@@ -277,19 +291,23 @@
             background: var(--primary-light);
         }
 
-        /* ================= CATEGORÍAS (SCROLL HORIZONTAL EN CELULARES) ================= */
+        /* ================= CATEGORÍAS (SIEMPRE ARRIBA AL HACER SCROLL) ================= */
         .categories-wrapper {
+            width: 100%;
             max-width: 1000px;
             margin: 0 auto 20px auto;
+            position: -webkit-sticky;
             position: sticky;
             top: 0;
-            z-index: 100;
-            background: rgba(251, 248, 245, 0.97);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            padding: 8px 10px;
-            border-bottom: 1px solid rgba(253, 164, 12, 0.2);
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            z-index: 1000;
+            background: #fbf8f5;
+            background: rgba(251, 248, 245, 0.98);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 10px 8px;
+            border-bottom: 2px solid rgba(253, 164, 12, 0.35);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+            box-sizing: border-box;
         }
 
         .categories {
@@ -297,7 +315,7 @@
             flex-wrap: wrap;
             justify-content: center;
             gap: 8px;
-            padding: 4px 2px;
+            padding: 2px 2px;
         }
 
         .categories button {
@@ -1188,21 +1206,39 @@
             }
 
             .search-container {
-                margin: 8px auto 12px auto;
+                margin: 8px auto 14px auto;
+                width: 100%;
+                padding: 0;
+                gap: 5px;
             }
 
             #search {
-                padding: 9px 12px;
-                font-size: 0.88rem;
+                padding: 10px 10px;
+                font-size: 0.85rem;
+                min-width: 0;
             }
 
             #btnBuscar {
-                padding: 0 12px;
-                font-size: 0.85rem;
+                padding: 0 10px;
+                height: 40px;
+                font-size: 0.80rem;
+                flex-shrink: 0;
             }
 
             #btnVoice {
-                padding: 0 10px;
+                padding: 0;
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+                flex-shrink: 0;
+            }
+
+            .categories-wrapper {
+                margin: 0 -10px 18px -10px;
+                width: calc(100% + 20px);
+                padding: 8px 10px;
+                top: 0;
+                z-index: 1000;
             }
 
             /* Scroll horizontal táctil de categorías en móviles */
@@ -1393,7 +1429,7 @@
     <!-- HEADER / LOGO VISTOSO Y AMPLIADO -->
     <header>
         <div class="banner-img-container">
-            <img src="img/Captura de pantalla 2025-10-30 213537.png" alt="Don Pilo" class="banner-img"
+            <img src="img/logo-rotiseria-transparente.png" alt="Don Pilo - La Rotisería" class="banner-img"
                 onerror="this.onerror=null; this.src='img/Captura de pantalla 2025-10-30 213537-Photoroom.png';">
         </div>
     </header>

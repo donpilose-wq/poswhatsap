@@ -1423,17 +1423,15 @@
                         placeholder="Dirección de entrega (ej: Av. Santa Fe 1234, 4° B)">
                     <textarea id="orderNotas" class="cart-input" rows="2"
                         placeholder="Aclaraciones (ej: sin sal, salsa aparte, cambio de $20.000)"></textarea>
-                </div>
-            </div>
 
-            <div class="cart-footer">
-                <div class="cart-total-row">
-                    <span>Total:</span>
-                    <span id="cartTotalPrice" class="cart-total-price">$0</span>
+                    <div class="cart-total-row" style="margin-top: 14px; margin-bottom: 10px; padding-top: 10px; border-top: 1px solid #e2e8f0;">
+                        <span>Total:</span>
+                        <span id="cartTotalPrice" class="cart-total-price">$0</span>
+                    </div>
+                    <button id="btnEnviarWhatsAppPedido" class="btn-send-whatsapp-order" onclick="enviarPedidoWhatsApp()">
+                        <span>📲 Enviar Pedido a WhatsApp</span>
+                    </button>
                 </div>
-                <button id="btnEnviarWhatsAppPedido" class="btn-send-whatsapp-order" onclick="enviarPedidoWhatsApp()">
-                    <span>📲 Enviar Pedido a WhatsApp</span>
-                </button>
             </div>
         </div>
     </div>
